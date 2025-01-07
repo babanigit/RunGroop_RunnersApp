@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using RunGroopWebApp.Data;
 using RunGroopWebApp.Data.Enum;
 using RunGroopWebApp.Interfaces;
@@ -16,30 +17,32 @@ namespace RunGroopWebApp.Repositories
         {
             _context = context;
         }
-        
+
         public bool Add(Race race)
         {
-            throw new NotImplementedException();
+            _context.Add(race);
+            return Save();
         }
 
         public bool Delete(Race race)
         {
-            throw new NotImplementedException();
+            _context.Remove(race);
+            return Save();
         }
 
-        public Task<IEnumerable<Race>> GetAll()
+        public async Task<IEnumerable<Race>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.Races.ToListAsync();
         }
 
-        public Task<IEnumerable<Race>> GetAllRacesByCity(string city)
+        public async Task<IEnumerable<Race>> GetAllRacesByCity(string city)
         {
-            throw new NotImplementedException();
+            return await _context.Races.Where(c => c.Address.City.Contains(city)).ToListAsync();
         }
 
-        public Task<Race?> GetByIdAsync(int id)
+        public async Task<Race?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Races.Include(i => i.Address).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task<Race?> GetByIdAsyncNoTracking(int id)
@@ -69,12 +72,14 @@ namespace RunGroopWebApp.Repositories
 
         public bool Save()
         {
-            throw new NotImplementedException();
+            var saved = _context.SaveChanges();
+            return saved > 0;
         }
 
         public bool Update(Race race)
         {
-            throw new NotImplementedException();
+            _context.Update(race);
+            return Save();
         }
     }
 }

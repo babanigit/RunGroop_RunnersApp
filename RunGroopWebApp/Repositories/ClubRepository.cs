@@ -47,7 +47,7 @@ namespace RunGroopWebApp.Repositories
 
         public async Task<Club?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Clubs.Include(i => i.Address).FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<Club?> GetByIdAsyncNoTracking(int id)
