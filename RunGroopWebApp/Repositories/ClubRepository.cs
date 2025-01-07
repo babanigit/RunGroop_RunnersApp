@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using RunGroopWebApp.Data;
+using RunGroopWebApp.Data.Enum;
+using RunGroopWebApp.Interfaces;
+using RunGroopWebApp.Models;
+
+namespace RunGroopWebApp.Repositories
+{
+    public class ClubRepository : IClubRepository
+    {
+        private readonly ApplicationDbContext _context;
+        public ClubRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public bool Add(Club club)
+        {
+            _context.Add(club);
+            return Save();
+        }
+
+        public bool Delete(Club club)
+        {
+            _context.Remove(club);
+            return Save();
+        }
+
+        public async Task<IEnumerable<Club>> GetAll()
+        {
+            return await _context.Clubs.ToListAsync();
+        }
+
+        public async Task<List<City>> GetAllCitiesByState(string state)
+        {
+            return await _context.Cities.ToListAsync();
+        }
+
+        public async Task<List<State>> GetAllStates()
+        {
+            return await _context.States.ToListAsync();
+        }
+
+        public async Task<Club?> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Club?> GetByIdAsyncNoTracking(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Club>> GetClubByCity(string city)
+        {
+            return await _context.Clubs.Where(c => c.Address.City.Contains(city)).Distinct().ToListAsync();
+        }
+
+        public async Task<IEnumerable<Club>> GetClubsByCategoryAndSliceAsync(ClubCategory category, int offset, int size)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Club>> GetClubsByState(string state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<int> GetCountAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<int> GetCountByCategoryAsync(ClubCategory category)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Club>> GetSliceAsync(int offset, int size)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0;
+        }
+
+        public bool Update(Club club)
+        {
+            _context.Update(club);
+            return Save();
+        }
+    }
+}
