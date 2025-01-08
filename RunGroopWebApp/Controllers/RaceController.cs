@@ -68,7 +68,7 @@ namespace RunGroopWebApp.Controllers
                     Title = raceVM.Title,
                     Description = raceVM.Description,
                     Image = result.Url.ToString(),
-                    AppUserId = raceVM.AppUserId,
+                    // AppUserId = raceVM.AppUserId,
                     RaceCategory = raceVM.RaceCategory,
                     Address = new Address
                     {
