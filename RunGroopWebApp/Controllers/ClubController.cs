@@ -21,10 +21,30 @@ namespace RunGroopWebApp.Controllers
             return View(clubs);
         }
 
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> DetailClub(int id)
         {
             Club clubs = await _clubRepository.GetByIdAsync(id);
             return View(clubs);
+        }
+
+
+        // [HttpGet]
+        public IActionResult Create()
+        {
+            // var curUserId = HttpContext.User.GetUserId();
+            // var createClubViewModel = new CreateClubViewModel { AppUserId = curUserId };
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Club club)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(club);
+            }
+            _clubRepository.Add(club);
+            return RedirectToAction("Index");
         }
 
     }
