@@ -27,8 +27,6 @@ namespace RunGroopWebApp.Controllers
             return View(clubs);
         }
 
-
-        // [HttpGet]
         public IActionResult Create()
         {
             // var curUserId = HttpContext.User.GetUserId();
