@@ -43,7 +43,7 @@ namespace RunGroopWebApp.Controllers
         public async Task<IActionResult> Create(CreateClubViewModel clubVM)
         {
 
-//getting error here in ModelState, Error: The AppUserId field is required. 
+            //getting error here in ModelState, Error: The AppUserId field is required. 
             if (!ModelState.IsValid)
             {
                 foreach (var error in ModelState)
@@ -90,6 +90,67 @@ namespace RunGroopWebApp.Controllers
             }
 
             return View(clubVM);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var club = await _clubRepository.GetByIdAsync(id);
+            if (club == null) return View("Error");
+            var clubVM = new EditClubViewModel
+            {
+                Title = club.Title,
+                Description = club.Description,
+                AddressId = club.AddressId,
+                Address = club.Address,
+                URL = club.Image,
+                ClubCategory = club.ClubCategory
+            };
+            return View(clubVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, EditClubViewModel clubVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Failed to edit club");
+                return View("Edit", clubVM);
+            }
+
+            var userClub = await _clubRepository.GetByIdAsyncNoTracking(id);
+
+            if (userClub == null)
+            {
+                return View("Error");
+            }
+
+            var photoResult = await _photoService.AddPhotoAsync(clubVM.Image);
+
+            if (photoResult.Error != null)
+            {
+                ModelState.AddModelError("Image", "Photo upload failed");
+                return View(clubVM);
+            }
+
+            if (!string.IsNullOrEmpty(userClub.Image))
+            {
+                _ = _photoService.DeletePhotoAsync(userClub.Image);
+            }
+
+            var club = new Club
+            {
+                Id = id,
+                Title = clubVM.Title,
+                Description = clubVM.Description,
+                Image = photoResult.Url.ToString(),
+                AddressId = clubVM.AddressId,
+                Address = clubVM.Address,
+            };
+
+            _clubRepository.Update(club);
+
+            return RedirectToAction("Index");
         }
 
     }
