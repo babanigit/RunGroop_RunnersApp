@@ -50,24 +50,29 @@ namespace RunGroopWebApp.Repositories
             return await _context.Races.Include(i => i.Address).AsNoTracking().FirstOrDefaultAsync();
         }
 
-        public Task<int> GetCountAsync()
+        public async Task<int> GetCountAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Races.CountAsync();
         }
 
-        public Task<int> GetCountByCategoryAsync(RaceCategory category)
+        public async Task<int> GetCountByCategoryAsync(RaceCategory category)
         {
-            throw new NotImplementedException();
+            return await _context.Races.CountAsync(r => r.RaceCategory == category);
         }
 
-        public Task<IEnumerable<Race>> GetRacesByCategoryAndSliceAsync(RaceCategory category, int offset, int size)
+        public async Task<IEnumerable<Race>> GetSliceAsync(int offset, int size)
         {
-            throw new NotImplementedException();
+            return await _context.Races.Include(a => a.Address).Skip(offset).Take(size).ToListAsync();
         }
 
-        public Task<IEnumerable<Race>> GetSliceAsync(int offset, int size)
+        public async Task<IEnumerable<Race>> GetRacesByCategoryAndSliceAsync(RaceCategory category, int offset, int size)
         {
-            throw new NotImplementedException();
+            return await _context.Races
+                .Where(r => r.RaceCategory == category)
+                .Include(a => a.Address)
+                .Skip(offset)
+                .Take(size)
+                .ToListAsync();
         }
 
         public bool Save()

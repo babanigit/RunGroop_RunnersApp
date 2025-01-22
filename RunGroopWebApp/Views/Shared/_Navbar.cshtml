@@ -4,96 +4,93 @@
 @inject UserManager<AppUser> UserManager
 
 @{
-    var currentUser = await UserManager.GetUserAsync(User);
+    @* var currentUser = await UserManager.GetUserAsync(User); *@
 }
 
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container-fluid">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RunGroopWebApp</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                </li>
-                @if (
-                true
-                    @* SignInManager.IsSignedIn(User) *@
-                )
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="user" asp-action="Index">Find Runners</a>
-                    </li>
-                }
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Club" asp-action="Index">Find Clubs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Race" asp-action="Index">Find Races</a>
-                </li>
-                <li class="nav-item">
-                    <a href="/blog" class="nav-link">Blog</a>
-                </li>
-            </ul>
+ <nav class="navbar navbar-expand-lg">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index" id="logo-text">RunGroop</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="icon-menu h4"></i>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            @* @if (SignInManager.IsSignedIn(User))
+                            { *@
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="user" asp-action="Index">Find Runners</a>
+                                </li>
+                            @* } *@
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Club" asp-action="Index">Find Clubs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Race" asp-action="Index">Find Races</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/blog" class="nav-link">Blog</a>
+                            </li>
+                        </ul>
+                        @* @if (SignInManager.IsSignedIn(User))
+                        { *@
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle p-lg-0" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @* @if (!string.IsNullOrEmpty(currentUser.ProfileImageUrl))
+                                        {
+                                            <img alt="Image" src="@currentUser.ProfileImageUrl" class="avatar avatar-xs">
+                                        }
+                                        else
+                                        {
+                                            <img alt="Image" src="/img/avatar-male-4.jpg" class="avatar avatar-xs">
+                                        } *@
+                                    </a>
+                                    <div
+                                     @* class="dropdown-menu" aria-labelledby="pagesDropdown" *@
+                                    >
 
-            @if (
-                  true
-                    @* SignInManager.IsSignedIn(User) *@
-            )
-            {
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle p-lg-0" href="#" id="dropdown01" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            @if (!string.IsNullOrEmpty(currentUser.ProfileImageUrl))
-                            {
-                                <img alt="Image" src="@currentUser.ProfileImageUrl" class="avatar avatar-xs">
-                            }
-                            else
-                            {
-                                <img alt="Image" src="/img/avatar-male-4.jpg" class="avatar avatar-xs">
-                            }
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-                            <a class="dropdown-item" asp-controller="User" asp-action="Detail"
-                                asp-route-id="@currentUser.Id">
-                                <span class="h6 mb-0">View Profile</span>
-                            </a>
+                                    @if(User.Identity.IsAuthenticated){
+                                        <div> user is Authenticated </div>
+                                    }
+                                        <a class="dropdown-item" asp-controller="User" asp-action="Detail" 
+                                        @* asp-route-id="@currentUser.Id" *@
+                                        >
+                                            <span class="h6 mb-0">View Profile</span>
+                                        </a>
 
-                            <a class="dropdown-item" asp-controller="User" asp-action="EditProfile">
-                                <span class="h6 mb-0">Edit Profile</span>
-                            </a>
+                                        <a class="dropdown-item" asp-controller="User" asp-action="EditProfile">
+                                            <span class="h6 mb-0">Edit Profile</span>
+                                        </a>
 
-                            <a class="dropdown-item" asp-area="" asp-controller="Club" asp-action="Create">
-                                <span class="h6 mb-0">Create Club</span>
-                            </a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="Create">
-                                <span class="h6 mb-0">Create Race</span>
-                            </a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Dashboard" asp-action="Index">
-                                <span class="h6 mb-0">Dashboard</span>
-                            </a>
-                            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">
-                                <span su class="h6 mb-0">Logout</span>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            @* }
-            else
-            { *@
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a asp-area="" asp-controller="Account" asp-action="Register">Sign up</a>
-                        <span>&nbsp;or&nbsp;</span>
-                        <a asp-area="" asp-controller="Account" asp-action="Login">Sign in</a>
-                    </li>
-                </ul>
-            }
+                                        <a class="dropdown-item" asp-area="" asp-controller="Club" asp-action="Create">
+                                            <span class="h6 mb-0">Create Club</span>
+                                        </a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Race" asp-action="Create">
+                                            <span class="h6 mb-0">Create Race</span>
+                                        </a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Dashboard" asp-action="Index">
+                                            <span class="h6 mb-0">Dashboard</span>
+                                        </a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">
+                                            <span su class="h6 mb-0">Logout</span>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        @* }
+                        else
+                        { *@
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="Account" asp-action="Register">Sign up</a>
+                                    <span>&nbsp;or&nbsp;</span>
+                                    <a asp-area="" asp-controller="Account" asp-action="Login">Sign in</a>
+                                </li>
+                            </ul>
+                        @* } *@
 
-        </div>
-    </div>
-</nav>
+                    </div>
+                    <!--end nav collapse-->
+                </nav>
