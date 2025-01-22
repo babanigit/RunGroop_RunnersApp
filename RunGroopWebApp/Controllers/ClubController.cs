@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using RunGroopWebApp.Data.Enum;
 using RunGroopWebApp.Interfaces;
 using RunGroopWebApp.Models;
 using RunGroopWebApp.ViewModels;
@@ -13,17 +14,47 @@ namespace RunGroopWebApp.Controllers
     {
         private readonly IClubRepository _clubRepository;
         private readonly IPhotoService _photoService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ClubController(IClubRepository clubRepository, IPhotoService photoService)
+        public ClubController(IClubRepository clubRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             _clubRepository = clubRepository;
             _photoService = photoService;
+            _httpContextAccessor = httpContextAccessor;
 
         }
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(int category = -1, int page = 1, int pageSize = 6)
         {
-            IEnumerable<Club> clubs = await _clubRepository.GetAll();
-            return View(clubs);
+            if (page < 1 || pageSize < 1)
+            {
+                return NotFound();
+            }
+
+            // if category is -1 (All) dont filter else filter by selected category
+            var clubs = category switch
+            {
+                -1 => await _clubRepository.GetSliceAsync((page - 1) * pageSize, pageSize),
+                _ => await _clubRepository.GetClubsByCategoryAndSliceAsync((ClubCategory)category, (page - 1) * pageSize, pageSize),
+            };
+
+            var count = category switch
+            {
+                -1 => await _clubRepository.GetCountAsync(),
+                _ => await _clubRepository.GetCountByCategoryAsync((ClubCategory)category),
+            };
+
+            var clubViewModel = new IndexClubViewModel
+            {
+                Clubs = clubs,
+                Page = page,
+                PageSize = pageSize,
+                TotalClubs = count,
+                TotalPages = (int)Math.Ceiling(count / (double)pageSize),
+                Category = category,
+            };
+
+            return View(clubViewModel);
         }
 
         public async Task<IActionResult> DetailClub(int id)
@@ -32,11 +63,12 @@ namespace RunGroopWebApp.Controllers
             return View(clubs);
         }
 
+        // get method for creating a club
         public IActionResult Create()
         {
-            // var curUserId = HttpContext.User.GetUserId();
-            // var createClubViewModel = new CreateClubViewModel { AppUserId = curUserId };
-            return View();
+            var curUserId = HttpContext.User.GetUserId();
+            var createClubViewModel = new CreateClubViewModel { AppUserId = curUserId };
+            return View(createClubViewModel);
         }
 
         [HttpPost]
@@ -68,7 +100,7 @@ namespace RunGroopWebApp.Controllers
                     Description = clubVM.Description,
                     Image = result.Url.ToString(),
                     ClubCategory = clubVM.ClubCategory,
-                    // AppUserId = clubVM.AppUserId,
+                    AppUserId = clubVM.AppUserId,
                     Address = new Address
                     {
                         Street = clubVM.Address.Street,

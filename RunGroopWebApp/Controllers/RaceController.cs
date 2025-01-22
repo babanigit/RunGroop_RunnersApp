@@ -15,11 +15,13 @@ namespace RunGroopWebApp.Controllers
     {
         private readonly IPhotoService _photoService;
         private readonly IRaceRepository _raceRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RaceController(IRaceRepository raceRepository, IPhotoService photoService)
+        public RaceController(IRaceRepository raceRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             _raceRepository = raceRepository;
             _photoService = photoService;
+            _httpContextAccessor = httpContextAccessor;
 
         }
 
@@ -64,28 +66,16 @@ namespace RunGroopWebApp.Controllers
 
         public IActionResult Create()
         {
-            // var curUserId = HttpContext.User.GetUserId();
-            // var createClubViewModel = new CreateClubViewModel { AppUserId = curUserId };
-            return View();
+            var curUserID = _httpContextAccessor.HttpContext?.User.GetUserId();
+            var createRaceViewModel = new CreateRaceViewModel { AppUserId = curUserID };
+            return View(createRaceViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateRaceViewModel raceVM)
         {
 
-            //getting error here in ModelState, Error: The AppUserId field is required. 
 
-            if (!ModelState.IsValid)
-            {
-                foreach (var error in ModelState)
-                {
-                    Console.WriteLine($"Key: {error.Key}");
-                    foreach (var subError in error.Value.Errors)
-                    {
-                        Console.WriteLine($"Error: {subError.ErrorMessage}");
-                    }
-                }
-            }
             if (ModelState.IsValid)
             {
                 var result = await _photoService.AddPhotoAsync(raceVM.Image);
@@ -95,7 +85,7 @@ namespace RunGroopWebApp.Controllers
                     Title = raceVM.Title,
                     Description = raceVM.Description,
                     Image = result.Url.ToString(),
-                    // AppUserId = raceVM.AppUserId,
+                    AppUserId = raceVM.AppUserId,
                     RaceCategory = raceVM.RaceCategory,
                     Address = new Address
                     {
