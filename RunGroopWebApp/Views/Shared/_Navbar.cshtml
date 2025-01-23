@@ -52,7 +52,7 @@
                                     >
 
                                     @if(User.Identity.IsAuthenticated){
-                                        <div> user is Authenticated </div>
+                                        <div> user is logged in </div>
                                     }
                                         <a class="dropdown-item" asp-controller="User" asp-action="Detail" 
                                         @* asp-route-id="@currentUser.Id" *@
