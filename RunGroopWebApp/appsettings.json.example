@@ -1,0 +1,18 @@
+{
+    "ConnectionStrings": {
+        "DefaultConnection": "Host=localhost;Database=RunGroop;Username=postgres;Password=HEHE"
+    },
+    "CloudinarySettings": {
+        "CloudName": "NAME_HERE",
+        "ApiKey": "KEY_HERE",
+        "ApiSecret": "SECRET_HERE"
+    },
+    "Logging": {
+        "LogLevel": {
+            "Default": "Information",
+            "Microsoft.AspNetCore": "Warning"
+        }
+    },
+    "AllowedHosts": "*",
+    "IPInfoToken": "TOKEN_HERE"
+}
