@@ -149,13 +149,13 @@ namespace RunGroopWebApp.Controllers
                 TempData["Success"] = "Registration successful!";
                 return RedirectToAction("Index", "Race");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                TempData["Error"] = "An unexpected error occurred during registration";
+                TempData["Error"] = $"Unexpected error: {ex.Message}";
                 return View(registerViewModel);
             }
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Logout()
         {

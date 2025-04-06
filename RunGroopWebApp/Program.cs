@@ -63,6 +63,13 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();  // <--- This line does the migration at startup
 }
 
+// Seed roles
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    await SeedData.SeedRolesAsync(roleManager);
+}
+
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
 {

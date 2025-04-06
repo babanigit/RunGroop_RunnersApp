@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=build /app/out . 
 
 # Expose necessary ports
-EXPOSE 5222
+EXPOSE 5223
 
 # Run the application
 CMD ["dotnet", "out/RunGroopWebApp.dll"]

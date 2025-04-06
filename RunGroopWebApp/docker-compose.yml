@@ -7,13 +7,13 @@ services:
       dockerfile: Dockerfile
     container_name: RunGroop-dotnetMVC-bab
     ports:
-      - "5222:5222"
+      - "5223:5223"
     # env_file:
     #   - ./.env # Load environment variables
     environment:
       ASPNETCORE_ENVIRONMENT: development
       # DefaultConnection: Host=postgres;Database=FinShark;Username=postgres;Password=admin
-      ASPNETCORE_URLS: http://+:5222
+      ASPNETCORE_URLS: http://+:5223
 
     depends_on:
       - postgres
@@ -31,7 +31,7 @@ services:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=RunGroop
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data # Persist data
 
