@@ -33,12 +33,17 @@ builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(
 
 // Configure PostgreSQL connection
 // Use environment variables for sensitive data
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//     options.UseNpgsql(
+//         builder.Configuration["ConnectionStrings__DefaultConnection"] ??
+//         builder.Configuration.GetConnectionString("DefaultConnection")
+//     )
+// );
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration["ConnectionStrings__DefaultConnection"] ??
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    )
-);
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 
 builder.Services.AddLogging(); // add logging
 
@@ -50,6 +55,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
        .AddCookie();
 
 var app = builder.Build();
+
+// Migrate database automatically
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();  // <--- This line does the migration at startup
+}
+
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
 {

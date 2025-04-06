@@ -1,0 +1,56 @@
+# .dockerignore for .NET 9 Web API
+
+# Ignore build output
+bin/
+obj/
+out/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore logs
+*.log
+
+# Ignore Visual Studio Code settings
+.vscode/
+.vscode/*
+
+# Ignore Rider/JetBrains project settings
+.idea/
+*.sln.iml
+
+# Ignore test results
+TestResults/
+
+# Ignore build artifacts
+*.dbmdl
+*.pdb
+*.mdb
+
+# Ignore packages
+*.nupkg
+*.snupkg
+packages/
+
+# Ignore Docker-related
+Dockerfile.*
+
+# Ignore temporary files
+*.tmp
+*.bak
+*.swp
+*.DS_Store
+Thumbs.db
+
+# Ignore git stuff (if Docker context includes the repo)
+.git/
+.gitignore
+
+# Ignore deployment config (optional)
+.env
+secrets.json
+# appsettings.Development.json
+appsettings.json.example

@@ -12,7 +12,7 @@ using RunGroopWebApp.Data;
 namespace RunGroopWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250213094215_InitialCreate")]
+    [Migration("20250406073913_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

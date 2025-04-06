@@ -2,36 +2,38 @@ version: '3.8'
 
 services:
   webapp:
-    container_name: runnersapp
     build:
-      context: .
+      context: ./
       dockerfile: Dockerfile
+    container_name: RunGroop-dotnetMVC-bab
     ports:
-      - "8080:8080"
-    # environment:
-    #   - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=runnersapp_db;Username=postgres;Password=postgres
+      - "5222:5222"
+    # env_file:
+    #   - ./.env # Load environment variables
     environment:
-      - ConnectionStrings__DefaultConnection=Host=${POSTGRES_HOST};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
-      - CloudinarySettings__CloudName=${CLOUDINARY_CLOUD_NAME}
-      - CloudinarySettings__ApiKey=${CLOUDINARY_API_KEY}
-      - CloudinarySettings__ApiSecret=${CLOUDINARY_API_SECRET}
-      - IPInfoToken=${IPINFO_TOKEN}
-    env_file:
-      - .env
-    depends_on:
-      - db
+      ASPNETCORE_ENVIRONMENT: development
+      # DefaultConnection: Host=postgres;Database=FinShark;Username=postgres;Password=admin
+      ASPNETCORE_URLS: http://+:5222
 
-  db:
-    image: postgres:16
-    container_name: runnersapp_db
+    depends_on:
+      - postgres
+    # restart: always
+
+    volumes:
+      - .:/app
+      - ./keys:/root/.aspnet/DataProtection-Keys
+
+  postgres:
+    image: postgres:13 # Using the official PostgreSQL image
+    container_name: RunGroop-postgres-bab
     environment:
-      POSTGRES_DB: runnersapp_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=RunGroop
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data # Persist data
 
 volumes:
   pgdata:
