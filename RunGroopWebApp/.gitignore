@@ -21,7 +21,7 @@ packages/
 
 # Ignore app settings secrets (if sensitive info is stored here)
 appsettings.json
-appsettings.*.json
+# appsettings.*.json
 .env
 
 # Ignore publish output
