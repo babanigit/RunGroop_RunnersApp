@@ -44,10 +44,10 @@ wwwroot/
 *.log
 
 # Ignore compiled files
-*.dll
-*.exe
-*.pdb
-*.cache
+# *.dll
+# *.exe
+# *.pdb
+# *.cache
 
 # Ignore temporary files
 *.tmp
