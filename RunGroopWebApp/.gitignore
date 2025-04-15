@@ -20,13 +20,13 @@ packages/
 *.snupkg
 
 # Ignore app settings secrets (if sensitive info is stored here)
-appsettings.json
+# appsettings.json
 # appsettings.*.json
-.env
+# .env
 
 # Ignore publish output
-wwwroot/
-*.PublishProfiles/
+# wwwroot/
+# *.PublishProfiles/
 
 # Ignore EF migrations history
 # Migrations/
