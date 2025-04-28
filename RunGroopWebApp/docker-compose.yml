@@ -3,35 +3,33 @@ version: "3.8"
 services:
   webapp:
     build:
-      context: ./
+      context: ./ 
       dockerfile: Dockerfile
     container_name: RunGroop-dotnetMVC-bab
     ports:
       - "5223:5223"
     environment:
       ASPNETCORE_ENVIRONMENT: production
-      DefaultConnection: Host=postgres;Port=5432;Database=RunGroop;Username=postgres;Password=admin
+      DefaultConnection: Host=postgres;Port=5432;Database=RunGroop;Username=postgres;Password=admin  # Fixed port to internal 5432
       ASPNETCORE_URLS: http://+:5223
-
     depends_on:
       - postgres
     # restart: always
-
     volumes:
       - .:/app
       - ./keys:/root/.aspnet/DataProtection-Keys
 
   postgres:
-    image: postgres:13 # Using the official PostgreSQL image
+    image: postgres:16 # Using the official PostgreSQL image
     container_name: RunGroop-postgres-bab
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=RunGroop
     ports:
-      - "5433:5432"
+      - "5433:5432"  # Exposing 5433 on host to 5432 in container
     volumes:
       - pgdata:/var/lib/postgresql/data # Persist data
 
 volumes:
-  pgdata:
+  pgdata: 
