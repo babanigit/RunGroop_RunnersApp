@@ -21,6 +21,10 @@ COPY --from=build /app/out .
 EXPOSE 5223
 
 # Run the application
-CMD ["dotnet", "out/RunGroopWebApp.dll"]
+# CMD ["dotnet", "out/RunGroopWebApp.dll"]
+
+#for railway
+CMD ["dotnet", "RunGroopWebApp.dll"]
+
 # CMD ["sh", "-c", "dotnet ef database update && dotnet out/api.dll"]
 
