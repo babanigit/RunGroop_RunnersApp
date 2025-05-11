@@ -12,6 +12,14 @@ using RunGroopWebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Load .env variables
+DotNetEnv.Env.Load();
+builder.Configuration.AddEnvironmentVariables();
+var config = builder.Configuration;
+
+var connStr = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
+              ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
 
 // Load environment variables into configuration
 builder.Configuration.AddEnvironmentVariables();
@@ -40,10 +48,12 @@ builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(
 //     )
 // );
 
+// Register ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
+    options.UseNpgsql(connStr)
+           .EnableSensitiveDataLogging()
+           .LogTo(Console.WriteLine, LogLevel.Information)
+);
 
 builder.Services.AddLogging(); // add logging
 
